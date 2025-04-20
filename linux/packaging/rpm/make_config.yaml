@@ -1,0 +1,21 @@
+icon: assets/icon/ic_app.png
+summary: 音乐盒
+group: Development/Tools
+vendor: Zinc
+packager: Zinc
+packagerEmail: zinc233@qq.com
+license: GPLv2
+url: https://live-musician.zinc233.top
+
+display_name: 音乐盒
+
+keywords:
+  - Application
+
+generic_name: 音乐盒
+
+categories:
+  - utils
+
+startup_notify: true
+
