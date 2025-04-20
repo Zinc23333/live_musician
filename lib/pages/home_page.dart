@@ -1,0 +1,244 @@
+import 'dart:async';
+
+import 'package:flutter/material.dart';
+import 'package:live_musician/data/constant.dart';
+import 'package:live_musician/data/net_ping.dart';
+import 'package:live_musician/pages/sound_split_page.dart';
+import 'package:live_musician/pages/tone_train_page.dart';
+import 'package:live_musician/pages/video_make_page.dart';
+import 'package:sidebarx/sidebarx.dart';
+
+final _tabs = [
+  (Icons.music_note, "音频分离", SoundSplitPage()),
+  (Icons.queue_music, "音色训练", ToneTrainPage()),
+  (Icons.music_video, "视频制作", VideoMakePage()),
+];
+
+class HomePage extends StatelessWidget {
+  HomePage({super.key});
+
+  final _controller = SidebarXController(selectedIndex: 0, extended: true);
+  final _key = GlobalKey<ScaffoldState>();
+
+  (IconData, String, Widget) get _currentTab =>
+      _tabs[_controller.selectedIndex];
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Live Musician',
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        primaryColor: primaryColor,
+        canvasColor: canvasColor,
+        scaffoldBackgroundColor: scaffoldBackgroundColor,
+        textTheme: const TextTheme(
+          headlineSmall: TextStyle(
+            color: Colors.white,
+            fontSize: 46,
+            fontWeight: FontWeight.w800,
+          ),
+          titleMedium: TextStyle(color: Colors.white),
+        ),
+        elevatedButtonTheme: ElevatedButtonThemeData(
+          style: ElevatedButton.styleFrom(
+            backgroundColor: canvasColor,
+            foregroundColor: Colors.white,
+          ),
+        ),
+        inputDecorationTheme: InputDecorationTheme(
+          labelStyle: TextStyle(color: Colors.white),
+        ),
+        chipTheme: ChipThemeData(
+          backgroundColor: scaffoldBackgroundColor,
+          labelStyle: TextStyle(color: Colors.white),
+          selectedColor: primaryColor,
+          checkmarkColor: Colors.white,
+        ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          backgroundColor: canvasColor,
+          foregroundColor: Colors.white,
+        ),
+      ),
+      home: Builder(
+        builder: (context) {
+          final isSmallScreen = MediaQuery.of(context).size.width < 600;
+          return _buildScaffold(isSmallScreen);
+        },
+      ),
+    );
+  }
+
+  Scaffold _buildScaffold(bool isSmallScreen) {
+    return Scaffold(
+      key: _key,
+      appBar:
+          isSmallScreen
+              ? AppBar(
+                backgroundColor: canvasColor,
+                title: Text(_currentTab.$2),
+                leading: IconButton(
+                  onPressed: () => _key.currentState?.openDrawer(),
+                  icon: const Icon(Icons.menu),
+                ),
+              )
+              : null,
+      drawer: AppSidebarX(controller: _controller),
+      body: Row(
+        children: [
+          if (!isSmallScreen) AppSidebarX(controller: _controller),
+          Expanded(child: _ScreensPage(controller: _controller)),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.menu),
+      ),
+    );
+  }
+}
+
+class AppSidebarX extends StatelessWidget {
+  const AppSidebarX({super.key, required SidebarXController controller})
+    : _controller = controller;
+
+  final SidebarXController _controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SidebarX(
+      controller: _controller,
+      theme: SidebarXTheme(
+        margin: const EdgeInsets.all(10),
+        decoration: BoxDecoration(
+          color: canvasColor,
+          borderRadius: BorderRadius.circular(20),
+        ),
+        hoverColor: scaffoldBackgroundColor,
+        textStyle: TextStyle(color: Colors.white.withAlpha(178)),
+        selectedTextStyle: const TextStyle(color: Colors.white),
+        hoverTextStyle: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.w500,
+        ),
+        itemTextPadding: const EdgeInsets.only(left: 30),
+        selectedItemTextPadding: const EdgeInsets.only(left: 30),
+        itemDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: canvasColor),
+        ),
+        selectedItemDecoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: actionColor.withAlpha(94)),
+          gradient: const LinearGradient(
+            colors: [accentCanvasColor, canvasColor],
+          ),
+          boxShadow: [
+            BoxShadow(color: Colors.black.withAlpha(71), blurRadius: 30),
+          ],
+        ),
+        iconTheme: IconThemeData(color: Colors.white.withAlpha(178), size: 20),
+        selectedIconTheme: const IconThemeData(color: Colors.white, size: 20),
+      ),
+      extendedTheme: const SidebarXTheme(
+        width: 200,
+        decoration: BoxDecoration(color: canvasColor),
+      ),
+      // footerDivider: divider,
+      footerBuilder: _buildPingBox,
+      items: _tabs.map((e) => SidebarXItem(icon: e.$1, label: e.$2)).toList(),
+    );
+  }
+
+  Widget _buildPingBox(context, extended) {
+    return _PingBox(key: UniqueKey(), extended: extended);
+  }
+}
+
+class _PingBox extends StatefulWidget {
+  const _PingBox({super.key, required this.extended});
+
+  final bool extended;
+
+  @override
+  State<_PingBox> createState() => _PingBoxState();
+}
+
+class _PingBoxState extends State<_PingBox> {
+  Duration? _ping;
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    final p = NetPing.instance;
+    _ping = p.lastPingDuration;
+
+    _timer = Timer.periodic(Duration(seconds: 1), (_) async {
+      _ping = p.lastPingDuration;
+      if (mounted) setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _timer?.cancel();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final fc = _ping == null ? Colors.red : Colors.green;
+    final txt =
+        _ping == null
+            ? "offline"
+            : widget.extended
+            ? "${_ping!.inMilliseconds} ms"
+            : "online";
+    final de =
+        widget.extended
+            ? BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              border: Border.all(color: Colors.white.withAlpha(77)),
+            )
+            : BoxDecoration(
+              border: Border(
+                top: BorderSide(color: Colors.white.withAlpha(77)),
+              ),
+            );
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 8),
+        decoration: de,
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(Icons.circle, color: fc, size: 8),
+            SizedBox(width: 4),
+            Text(txt, style: TextStyle(color: fc)),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ScreensPage extends StatelessWidget {
+  const _ScreensPage({required this.controller});
+
+  final SidebarXController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: AnimatedBuilder(
+          animation: controller,
+          builder: (context, child_) => _tabs[controller.selectedIndex].$3,
+        ),
+      ),
+    );
+  }
+}
