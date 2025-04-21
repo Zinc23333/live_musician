@@ -3,7 +3,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 
 class MusicPlayerDialog extends StatefulWidget {
-  const MusicPlayerDialog({super.key, required this.audioData});
+  const MusicPlayerDialog(this.audioData, {super.key});
   final Uint8List audioData;
 
   void show(BuildContext context) =>

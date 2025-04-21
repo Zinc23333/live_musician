@@ -58,7 +58,11 @@ class Net {
   }
 
   // 拉取文件
-  Future<Uint8List?> fetchFile(String cate, String name, String file) async {
+  static Future<Uint8List?> fetchFile(
+    String cate,
+    String name,
+    String file,
+  ) async {
     try {
       final response = await http.get(
         Uri.parse("${baseUrl}file/$cate/$name/$file"),
@@ -74,7 +78,7 @@ class Net {
     }
   }
 
-  Future<Uint8List?> fetchFileSeparate(String name, String file) =>
+  static Future<Uint8List?> fetchFileSeparate(String name, String file) =>
       fetchFile("separate", name, file);
 
   // 提交算题

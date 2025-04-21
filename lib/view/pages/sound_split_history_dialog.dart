@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:live_musician/data/net.dart';
+import 'package:live_musician/view/widgets/music_player_dialog.dart';
+import 'package:live_musician/view/widgets/waiting_dialog.dart';
 
 class SoundSplitHistoryDialog extends StatelessWidget {
   const SoundSplitHistoryDialog(this.data, {super.key});
@@ -25,7 +28,11 @@ class SoundSplitHistoryDialog extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children:
-                              e.value.map((e) => _buildFileName(e)).toList(),
+                              e.value
+                                  .map(
+                                    (fn) => _buildFileName(context, e.key, fn),
+                                  )
+                                  .toList(),
                         ),
                       ),
                     ),
@@ -36,12 +43,20 @@ class SoundSplitHistoryDialog extends StatelessWidget {
     );
   }
 
-  Widget _buildFileName(String name) {
-    final isIns = name.startsWith("instrument");
-    final isVocal = name.startsWith("vocal");
+  Widget _buildFileName(BuildContext context, String dname, String fname) {
+    final isIns = fname.startsWith("instrument");
+    final isVocal = fname.startsWith("vocal");
 
     return TextButton.icon(
-      onPressed: () {},
+      onPressed: () {
+        WaitingDialog(Net.fetchFileSeparate(dname, fname)).show(context).then((
+          v,
+        ) {
+          if (v != null && context.mounted) {
+            MusicPlayerDialog(v).show(context);
+          }
+        });
+      },
       label: Text(
         isIns
             ? "乐器"
