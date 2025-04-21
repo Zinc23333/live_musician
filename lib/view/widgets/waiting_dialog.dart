@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:live_musician/data/constant.dart';
 
 class WaitingDialog<T> extends StatelessWidget {
   const WaitingDialog(this.future, {super.key});
@@ -12,8 +11,7 @@ class WaitingDialog<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("加载中...", style: TextTheme.of(context).titleLarge),
-      backgroundColor: canvasColor,
+      title: Text("加载中..."),
       content: FutureBuilder(
         future: future,
         builder: (context, snapshot) {

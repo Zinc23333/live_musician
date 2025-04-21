@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:live_musician/data/constant.dart';
 import 'package:live_musician/data/net_ping.dart';
+import 'package:live_musician/view/func/history_dialog_route.dart';
 import 'package:live_musician/view/pages/sound_split_page.dart';
 import 'package:live_musician/view/pages/tone_train_page.dart';
 import 'package:live_musician/view/pages/video_make_page.dart';
@@ -47,10 +48,25 @@ class HomePage extends StatelessWidget {
             fontSize: 46,
             fontWeight: FontWeight.w800,
           ),
-          titleMedium: TextStyle(color: Colors.white),
-          titleLarge: TextStyle(color: Colors.white),
-          bodyMedium: TextStyle(color: Colors.white),
-          bodyLarge: TextStyle(color: Colors.white),
+          titleMedium: whiteTextStyle,
+          titleLarge: whiteTextStyle,
+          titleSmall: whiteTextStyle,
+          labelLarge: whiteTextStyle,
+          labelMedium: whiteTextStyle,
+          labelSmall: whiteTextStyle,
+          bodySmall: whiteTextStyle,
+          bodyMedium: whiteTextStyle,
+          bodyLarge: whiteTextStyle,
+        ),
+        listTileTheme: ListTileThemeData(textColor: Colors.white),
+        dialogTheme: DialogTheme(
+          backgroundColor: canvasColor,
+          titleTextStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+          contentTextStyle: whiteTextStyle,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -59,13 +75,13 @@ class HomePage extends StatelessWidget {
           ),
         ),
         inputDecorationTheme: InputDecorationTheme(
-          labelStyle: TextStyle(color: Colors.white),
+          labelStyle: whiteTextStyle,
           hintStyle: TextStyle(color: Colors.white.withAlpha(178)),
         ),
 
         chipTheme: ChipThemeData(
           backgroundColor: scaffoldBackgroundColor,
-          labelStyle: TextStyle(color: Colors.white),
+          labelStyle: whiteTextStyle,
           selectedColor: primaryColor,
           checkmarkColor: Colors.white,
         ),
@@ -77,13 +93,13 @@ class HomePage extends StatelessWidget {
       home: Builder(
         builder: (context) {
           final isSmallScreen = MediaQuery.of(context).size.width < 600;
-          return _buildScaffold(isSmallScreen);
+          return _buildScaffold(context, isSmallScreen);
         },
       ),
     );
   }
 
-  Scaffold _buildScaffold(bool isSmallScreen) {
+  Scaffold _buildScaffold(BuildContext context, bool isSmallScreen) {
     return Scaffold(
       key: _key,
       appBar:
@@ -105,7 +121,9 @@ class HomePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          historyDialogRoute(context, _controller.selectedIndex);
+        },
         child: const Icon(Icons.menu),
       ),
     );
@@ -130,7 +148,7 @@ class AppSidebarX extends StatelessWidget {
         ),
         hoverColor: scaffoldBackgroundColor,
         textStyle: TextStyle(color: Colors.white.withAlpha(178)),
-        selectedTextStyle: const TextStyle(color: Colors.white),
+        selectedTextStyle: whiteTextStyle,
         hoverTextStyle: const TextStyle(
           color: Colors.white,
           fontWeight: FontWeight.w500,

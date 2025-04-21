@@ -2,14 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:live_musician/data/types/separate_model.dart';
 
 class Net {
   static const String baseUrl = "https://qaq.zinc233.top:48979/lm/";
-  static final _dio = Dio();
 
   static Future<Duration?> ping() async {
     try {
@@ -38,6 +36,16 @@ class Net {
     }
   }
 
+  static Future<Map<String, List<String>>> fetchSeparateFiles() async {
+    final response = await http.get(Uri.parse("${baseUrl}separate_files"));
+    if (response.statusCode == 200) {
+      final r = jsonDecode(response.body) as Map<String, dynamic>;
+      return r.map((key, value) => MapEntry(key, List<String>.from(value)));
+    } else {
+      throw Exception("Failed to load separate files");
+    }
+  }
+
   // 音色推理
   static Future<List<String>> fetchVoice() async {
     final response = await http.get(Uri.parse("${baseUrl}voice"));
@@ -49,28 +57,44 @@ class Net {
     }
   }
 
+  // 拉取文件
+  Future<Uint8List?> fetchFile(String cate, String name, String file) async {
+    try {
+      final response = await http.get(
+        Uri.parse("${baseUrl}file/$cate/$name/$file"),
+      );
+      if (response.statusCode == 200) {
+        return response.bodyBytes;
+      } else {
+        throw Exception("Failed to load file");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      return null;
+    }
+  }
+
+  Future<Uint8List?> fetchFileSeparate(String name, String file) =>
+      fetchFile("separate", name, file);
+
   // 提交算题
 
   // 分离音色
-
   static Future<bool> seperate(
     String taskName,
     SeparateModel model,
     Uint8List data,
   ) async {
     try {
-      final uri = "${baseUrl}separate";
-
-      // 构建 FormData
-      final formData = FormData.fromMap({
-        'taskName': taskName,
-        'model': model.model,
-        'file': MultipartFile.fromBytes(data, filename: "audio"),
-      });
-
-      // 发送 POST 请求
-      final response = await _dio.post(uri, data: formData);
-
+      final uri = Uri.parse("${baseUrl}separate");
+      final request =
+          http.MultipartRequest("POST", uri)
+            ..fields['taskName'] = taskName
+            ..fields['model'] = model.model
+            ..files.add(
+              http.MultipartFile.fromBytes("file", data, filename: "audio"),
+            );
+      final response = await request.send();
       return response.statusCode == 200;
     } catch (e) {
       debugPrint(e.toString());
