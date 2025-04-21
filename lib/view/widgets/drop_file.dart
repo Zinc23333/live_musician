@@ -6,6 +6,7 @@ import 'package:file_icon/file_icon.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:live_musician/data/exts/bool_ex.dart';
+import 'package:live_musician/view/widgets/waiting_dialog.dart';
 
 class DropFile extends StatefulWidget {
   const DropFile({
@@ -16,7 +17,7 @@ class DropFile extends StatefulWidget {
   });
   final FileType fileType;
   final List<String> allowExtension;
-  final void Function(Uint8List data)? onFile;
+  final void Function(Uint8List data, String? fileName)? onFile;
 
   @override
   State<DropFile> createState() => _DropFileState();
@@ -29,15 +30,17 @@ class _DropFileState extends State<DropFile> {
   bool get hasFile => file1 != null || file2 != null;
   String? get fileName => file1?.name ?? file2?.name;
   Future<Uint8List?> get fileData async =>
-      await file1?.readAsBytes() ?? file2?.bytes;
+      await file1?.readAsBytes() ??
+      (file2?.readStream != null
+          ? Uint8List.fromList([await for (final d in file2!.readStream!) ...d])
+          : null);
 
-  void onFile() {
+  void onFile() async {
     if (hasFile) {
-      fileData.then((value) {
-        if (value != null) {
-          widget.onFile?.call(value);
-        }
-      });
+      final value = await WaitingDialog(fileData).show(context);
+      if (value != null) {
+        widget.onFile?.call(value, fileName);
+      }
     }
   }
 
@@ -50,7 +53,6 @@ class _DropFileState extends State<DropFile> {
           if (widget.allowExtension.any((e) => f.name.endsWith(e))) {
             file1 = f;
             file2 = null;
-            onFile();
             setState(() {});
           }
         }
@@ -60,6 +62,7 @@ class _DropFileState extends State<DropFile> {
           final sms = ScaffoldMessenger.of(context);
           final f = await FilePicker.platform.pickFiles(
             type: widget.fileType,
+            withReadStream: true,
             allowedExtensions: (widget.fileType == FileType.custom).ifTrue(
               widget.allowExtension,
             ),
@@ -97,7 +100,7 @@ class _DropFileState extends State<DropFile> {
               SizedBox(height: 8),
 
               Text(
-                fileName ?? '打开文件(${widget.allowExtension.join(" / ")})',
+                fileName ?? '打开文件(${widget.allowExtension.join("/")})',
                 style: TextStyle(fontSize: 16, color: Colors.white),
               ),
             ],

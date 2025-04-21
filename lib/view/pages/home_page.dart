@@ -3,9 +3,9 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:live_musician/data/constant.dart';
 import 'package:live_musician/data/net_ping.dart';
-import 'package:live_musician/pages/sound_split_page.dart';
-import 'package:live_musician/pages/tone_train_page.dart';
-import 'package:live_musician/pages/video_make_page.dart';
+import 'package:live_musician/view/pages/sound_split_page.dart';
+import 'package:live_musician/view/pages/tone_train_page.dart';
+import 'package:live_musician/view/pages/video_make_page.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 final _tabs = [
@@ -32,6 +32,15 @@ class HomePage extends StatelessWidget {
         primaryColor: primaryColor,
         canvasColor: canvasColor,
         scaffoldBackgroundColor: scaffoldBackgroundColor,
+        appBarTheme: AppBarTheme(
+          backgroundColor: canvasColor,
+          foregroundColor: Colors.white,
+          titleTextStyle: const TextStyle(
+            color: Colors.white,
+            fontSize: 20,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
         textTheme: const TextTheme(
           headlineSmall: TextStyle(
             color: Colors.white,
@@ -39,6 +48,9 @@ class HomePage extends StatelessWidget {
             fontWeight: FontWeight.w800,
           ),
           titleMedium: TextStyle(color: Colors.white),
+          titleLarge: TextStyle(color: Colors.white),
+          bodyMedium: TextStyle(color: Colors.white),
+          bodyLarge: TextStyle(color: Colors.white),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -48,7 +60,9 @@ class HomePage extends StatelessWidget {
         ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: TextStyle(color: Colors.white),
+          hintStyle: TextStyle(color: Colors.white.withAlpha(178)),
         ),
+
         chipTheme: ChipThemeData(
           backgroundColor: scaffoldBackgroundColor,
           labelStyle: TextStyle(color: Colors.white),

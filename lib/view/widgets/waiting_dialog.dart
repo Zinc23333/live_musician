@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_musician/data/constant.dart';
 
 class WaitingDialog<T> extends StatelessWidget {
   const WaitingDialog(this.future, {super.key});
@@ -11,11 +12,12 @@ class WaitingDialog<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("加载中..."),
+      title: Text("加载中...", style: TextTheme.of(context).titleLarge),
+      backgroundColor: canvasColor,
       content: FutureBuilder(
         future: future,
         builder: (context, snapshot) {
-          debugPrint("message: ${snapshot.data}");
+          // debugPrint("message: ${snapshot.data}");
           if (snapshot.connectionState == ConnectionState.done) {
             if (snapshot.hasError) {
               debugPrint(snapshot.error.toString());

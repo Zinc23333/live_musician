@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:live_musician/widgets/drop_file.dart';
-import 'package:live_musician/widgets/gap.dart';
+import 'package:live_musician/view/widgets/drop_file.dart';
+import 'package:live_musician/view/widgets/gap.dart';
 
 class ToneTrainPage extends StatefulWidget {
   const ToneTrainPage({super.key});
