@@ -4,6 +4,7 @@ import 'package:live_musician/data/net_cache.dart';
 import 'package:live_musician/data/types/separate_model.dart';
 import 'package:live_musician/widgets/drop_file.dart';
 import 'package:live_musician/widgets/future_choice.dart';
+import 'package:live_musician/widgets/gap.dart';
 
 class SoundSplitPage extends StatefulWidget {
   const SoundSplitPage({super.key});
@@ -25,7 +26,9 @@ class _SoundSplitPageState extends State<SoundSplitPage> {
             labelText: '请输入任务名称',
           ),
         ),
+        Gap(),
         Text("请选择分离模型", style: TextTheme.of(context).titleMedium),
+        Gap(),
         FutureChoice(
           future: NetCache.fetchSeparateModel(),
           selected: selectedModel,
@@ -36,6 +39,7 @@ class _SoundSplitPageState extends State<SoundSplitPage> {
             });
           },
         ),
+        Gap(),
         if (selectedModel != null)
           Text.rich(
             TextSpan(
@@ -45,19 +49,16 @@ class _SoundSplitPageState extends State<SoundSplitPage> {
                   child: Icon(Icons.info, color: Colors.grey, size: 20),
                 ),
                 TextSpan(text: " "),
-                // TextSpan(
-                //   text: selectedModel!.name,
-                //   style: TextStyle(fontWeight: FontWeight.bold),
-                // ),
-                // TextSpan(text: ": "),
                 TextSpan(text: selectedModel!.description),
                 TextSpan(text: selectedModel!.application),
               ],
             ),
           ),
+        Gap(),
         Text("请上传包含音频文件", style: TextTheme.of(context).titleMedium),
-
+        Gap(),
         DropFile(allowExtension: ["wav", "mp3"], fileType: FileType.audio),
+        Gap(),
         ElevatedButton(onPressed: () {}, child: Text("开始分离")),
       ],
       // ),
