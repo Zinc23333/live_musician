@@ -6,13 +6,13 @@ import 'package:live_musician/data/net_ping.dart';
 import 'package:live_musician/view/func/history_dialog_route.dart';
 import 'package:live_musician/view/pages/sound_split_page.dart';
 import 'package:live_musician/view/pages/tone_train_page.dart';
-import 'package:live_musician/view/pages/tone_infer_page.dart';
+import 'package:live_musician/view/pages/voice_infer_page.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 final _tabs = [
   (Icons.music_note, "音频分离", SoundSplitPage()),
   (Icons.queue_music, "音色训练", ToneTrainPage()),
-  (Icons.record_voice_over, "音色推理", ToneInferPage()),
+  (Icons.record_voice_over, "音色推理", VoiceInferPage()),
   (Icons.music_video, "视频制作", Placeholder()),
 ];
 

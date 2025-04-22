@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:live_musician/data/types/infer_file.dart';
 import 'package:live_musician/data/types/separate_model.dart';
 import 'package:live_musician/data/types/separate_sound.dart';
 
@@ -62,6 +63,16 @@ class Net {
     }
   }
 
+  static Future<List<InferFile>> fetchInferFiles() async {
+    final response = await http.get(Uri.parse("${baseUrl}voice_infer_files"));
+    if (response.statusCode == 200) {
+      final r = jsonDecode(response.body) as List;
+      return r.map((e) => InferFile.fromJson(e)).toList();
+    } else {
+      throw Exception("Failed to load infer files");
+    }
+  }
+
   // 拉取文件
   static Future<Uint8List?> fetchFile(
     String cate,
@@ -85,6 +96,9 @@ class Net {
 
   static Future<Uint8List?> fetchFileSeparate(String name, String file) =>
       fetchFile("separate", name, file);
+
+  static Future<Uint8List?> fetchFileInfer(String seed) =>
+      fetchFile("change", seed, "1.wav");
 
   // 提交算题
 
@@ -111,6 +125,7 @@ class Net {
     }
   }
 
+  // 音色训练
   static Future<bool> voiceTrain(String taskName, Uint8List data) async {
     try {
       final uri = Uri.parse("${baseUrl}voice_train");
@@ -120,6 +135,23 @@ class Net {
             ..files.add(
               http.MultipartFile.fromBytes("file", data, filename: "archive"),
             );
+      final response = await request.send();
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
+  // 声音推理
+  static Future<bool> voiceInfer(String toneName, String musicName) async {
+    try {
+      final uri = Uri.parse("${baseUrl}voice_infer");
+      final request =
+          http.MultipartRequest("POST", uri)
+            ..fields['toneName'] = toneName
+            ..fields['musicName'] = musicName;
+
       final response = await request.send();
       return response.statusCode == 200;
     } catch (e) {

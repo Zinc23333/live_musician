@@ -1,4 +1,5 @@
 import 'package:live_musician/data/net.dart';
+import 'package:live_musician/data/types/infer_file.dart';
 import 'package:live_musician/data/types/separate_model.dart';
 import 'package:live_musician/data/types/separate_sound.dart';
 
@@ -41,6 +42,21 @@ class NetCache {
     final r = await Net.fetchSeparateFiles();
     if (r.isNotEmpty) {
       _separateFiles = r;
+      return r;
+    }
+    return [];
+  }
+
+  static List<InferFile> _inferFiles = [];
+  static Future<List<InferFile>> fetchInferFiles({
+    bool forceRefresh = false,
+  }) async {
+    if (!forceRefresh && _inferFiles.isNotEmpty) {
+      return _inferFiles;
+    }
+    final r = await Net.fetchInferFiles();
+    if (r.isNotEmpty) {
+      _inferFiles = r;
       return r;
     }
     return [];

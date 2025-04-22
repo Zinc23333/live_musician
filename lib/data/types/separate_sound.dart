@@ -5,13 +5,12 @@ class SeparateSound {
   final List<String> files;
 
   factory SeparateSound.fromJson(MapEntry<String, dynamic> json) {
-    // return SeparateSound(
-    //   json['name'] as String,
-    //   (json['files'] as List<dynamic>).cast<String>(),
-    // );
     return SeparateSound(
       json.key,
       (json.value as List<dynamic>).cast<String>(),
     );
   }
+
+  bool containVoice() => files.any((e) => e.startsWith("vocal"));
+  bool containInstrument() => files.any((e) => e.startsWith("instrument"));
 }
