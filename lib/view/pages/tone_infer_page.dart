@@ -4,14 +4,14 @@ import 'package:live_musician/data/types/separate_sound.dart';
 import 'package:live_musician/view/widgets/future_choice.dart';
 import 'package:live_musician/view/widgets/gap.dart';
 
-class VideoMakePage extends StatefulWidget {
-  const VideoMakePage({super.key});
+class ToneInferPage extends StatefulWidget {
+  const ToneInferPage({super.key});
 
   @override
-  State<VideoMakePage> createState() => _VideoMakePageState();
+  State<ToneInferPage> createState() => _ToneInferPageState();
 }
 
-class _VideoMakePageState extends State<VideoMakePage> {
+class _ToneInferPageState extends State<ToneInferPage> {
   String? voice;
   SeparateSound? separateSound;
 
@@ -44,7 +44,8 @@ class _VideoMakePageState extends State<VideoMakePage> {
             });
           },
         ),
-        // DropFile(allowExtension: ["mp3", "wav"], fileType: FileType.audio),
+        Gap(),
+        ElevatedButton(onPressed: () {}, child: Text("开始推理")),
       ],
     );
   }

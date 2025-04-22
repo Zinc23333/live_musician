@@ -39,7 +39,11 @@ class _DropFileState extends State<DropFile> {
     if (hasFile) {
       final value = await WaitingDialog(fileData).show(context);
       if (value != null) {
-        widget.onFile?.call(value, fileName);
+        final f = fileName!;
+        var ld = f.lastIndexOf(".");
+        ld = ld == -1 ? f.length : ld;
+
+        widget.onFile?.call(value, f.substring(0, ld));
       }
     }
   }
@@ -53,6 +57,7 @@ class _DropFileState extends State<DropFile> {
           if (widget.allowExtension.any((e) => f.name.endsWith(e))) {
             file1 = f;
             file2 = null;
+            onFile();
             setState(() {});
           }
         }

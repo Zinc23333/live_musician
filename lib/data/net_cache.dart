@@ -19,8 +19,8 @@ class NetCache {
   }
 
   static List<String> _voice = [];
-  static Future<List<String>> fetchVoice() async {
-    if (_voice.isNotEmpty) {
+  static Future<List<String>> fetchVoice({bool forceRefresh = false}) async {
+    if (!forceRefresh && _voice.isNotEmpty) {
       return _voice;
     }
     final r = await Net.fetchVoice();

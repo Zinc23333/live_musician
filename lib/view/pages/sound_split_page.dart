@@ -70,14 +70,13 @@ class _SoundSplitPageState extends State<SoundSplitPage> {
         Text("请上传包含音频文件", style: TextTheme.of(context).titleMedium),
         Gap(),
         DropFile(
+          key: ValueKey("drop-file-1"),
           allowExtension: ["wav", "mp3", "flac", "aac", "ogg", "m4a"],
           fileType: FileType.audio,
           onFile: (d, f) {
             data = d;
             if (f != null) {
-              var ld = f.lastIndexOf(".");
-              ld = ld == -1 ? f.length : ld;
-              taskNameController.text = f.substring(0, ld);
+              taskNameController.text = f;
             }
           },
         ),

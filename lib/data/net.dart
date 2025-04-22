@@ -110,4 +110,21 @@ class Net {
       return false;
     }
   }
+
+  static Future<bool> voiceTrain(String taskName, Uint8List data) async {
+    try {
+      final uri = Uri.parse("${baseUrl}voice_train");
+      final request =
+          http.MultipartRequest("POST", uri)
+            ..fields['taskName'] = taskName
+            ..files.add(
+              http.MultipartFile.fromBytes("file", data, filename: "archive"),
+            );
+      final response = await request.send();
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
 }
