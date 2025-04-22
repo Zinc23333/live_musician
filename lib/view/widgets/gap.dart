@@ -8,4 +8,6 @@ class Gap extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(height: size, width: size);
   }
+
+  static Expanded expanded() => Expanded(child: SizedBox());
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:live_musician/data/net_cache.dart';
+import 'package:live_musician/data/types/separate_sound.dart';
 import 'package:live_musician/view/widgets/future_choice.dart';
 import 'package:live_musician/view/widgets/gap.dart';
 
@@ -12,6 +13,7 @@ class VideoMakePage extends StatefulWidget {
 
 class _VideoMakePageState extends State<VideoMakePage> {
   String? voice;
+  SeparateSound? separateSound;
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,16 @@ class _VideoMakePageState extends State<VideoMakePage> {
         Gap(),
         Text("请选择一首分离的乐曲", style: TextTheme.of(context).titleMedium),
         Gap(),
-
+        FutureChoice(
+          future: NetCache.fetchSeparateFiles(),
+          showNameFunc: (e) => e.name,
+          selected: separateSound,
+          onSelected: (e) {
+            setState(() {
+              separateSound = e;
+            });
+          },
+        ),
         // DropFile(allowExtension: ["mp3", "wav"], fileType: FileType.audio),
       ],
     );

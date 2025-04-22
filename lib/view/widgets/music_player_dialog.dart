@@ -1,6 +1,7 @@
 import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
+import 'package:live_musician/view/widgets/gap.dart';
 
 class MusicPlayerDialog extends StatefulWidget {
   const MusicPlayerDialog(this.audioData, {super.key});
@@ -88,7 +89,21 @@ class _MusicPlayerDialogState extends State<MusicPlayerDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text('正在播放'),
+      title: Row(
+        children: [
+          const Text('正在播放'),
+          Gap.expanded(),
+          IconButton(
+            icon: Icon(
+              _playerState == PlayerState.playing
+                  ? Icons.pause
+                  : Icons.play_arrow,
+              size: 36,
+            ),
+            onPressed: _togglePlay,
+          ),
+        ],
+      ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -114,24 +129,8 @@ class _MusicPlayerDialogState extends State<MusicPlayerDialog> {
               Text(_formatDuration(_duration)),
             ],
           ),
-          const SizedBox(height: 10),
-          IconButton(
-            icon: Icon(
-              _playerState == PlayerState.playing
-                  ? Icons.pause
-                  : Icons.play_arrow,
-              size: 36,
-            ),
-            onPressed: _togglePlay,
-          ),
         ],
       ),
-      actions: [
-        TextButton(
-          child: const Text('关闭'),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ],
     );
   }
 }

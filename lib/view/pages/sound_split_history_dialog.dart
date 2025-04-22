@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:live_musician/data/net.dart';
+import 'package:live_musician/data/types/separate_sound.dart';
 import 'package:live_musician/view/widgets/music_player_dialog.dart';
 import 'package:live_musician/view/widgets/waiting_dialog.dart';
 
 class SoundSplitHistoryDialog extends StatelessWidget {
   const SoundSplitHistoryDialog(this.data, {super.key});
 
-  final Map<String, List<String>> data;
+  final List<SeparateSound> data;
 
   @override
   Widget build(BuildContext context) {
@@ -16,11 +17,11 @@ class SoundSplitHistoryDialog extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children:
-              data.entries
+              data
                   .map(
                     (e) => ListTile(
                       title: Text(
-                        e.key,
+                        e.name,
                         style: TextTheme.of(context).titleMedium,
                       ),
                       subtitle: SingleChildScrollView(
@@ -28,9 +29,9 @@ class SoundSplitHistoryDialog extends StatelessWidget {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children:
-                              e.value
+                              e.files
                                   .map(
-                                    (fn) => _buildFileName(context, e.key, fn),
+                                    (fn) => _buildFileName(context, e.name, fn),
                                   )
                                   .toList(),
                         ),

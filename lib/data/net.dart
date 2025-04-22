@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:live_musician/data/types/separate_model.dart';
+import 'package:live_musician/data/types/separate_sound.dart';
 
 class Net {
   static const String baseUrl = "https://qaq.zinc233.top:48979/lm/";
@@ -36,11 +37,15 @@ class Net {
     }
   }
 
-  static Future<Map<String, List<String>>> fetchSeparateFiles() async {
+  static Future<List<SeparateSound>> fetchSeparateFiles() async {
     final response = await http.get(Uri.parse("${baseUrl}separate_files"));
     if (response.statusCode == 200) {
-      final r = jsonDecode(response.body) as Map<String, dynamic>;
-      return r.map((key, value) => MapEntry(key, List<String>.from(value)));
+      final r = jsonDecode(response.body);
+      return r.entries
+          .map((e) => SeparateSound.fromJson(e))
+          .toList()
+          .cast<SeparateSound>();
+      // return r.map((key, value) => MapEntry(key, List<String>.from(value)));
     } else {
       throw Exception("Failed to load separate files");
     }

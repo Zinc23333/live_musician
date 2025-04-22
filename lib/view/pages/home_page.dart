@@ -21,9 +21,6 @@ class HomePage extends StatelessWidget {
   final _controller = SidebarXController(selectedIndex: 0, extended: true);
   final _key = GlobalKey<ScaffoldState>();
 
-  (IconData, String, Widget) get _currentTab =>
-      _tabs[_controller.selectedIndex];
-
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -74,6 +71,9 @@ class HomePage extends StatelessWidget {
             foregroundColor: Colors.white,
           ),
         ),
+        iconButtonTheme: IconButtonThemeData(
+          style: IconButton.styleFrom(foregroundColor: Colors.white),
+        ),
         inputDecorationTheme: InputDecorationTheme(
           labelStyle: whiteTextStyle,
           hintStyle: TextStyle(color: Colors.white.withAlpha(178)),
@@ -106,7 +106,7 @@ class HomePage extends StatelessWidget {
           isSmallScreen
               ? AppBar(
                 backgroundColor: canvasColor,
-                title: Text(_currentTab.$2),
+                title: Text("音乐盒"),
                 leading: IconButton(
                   onPressed: () => _key.currentState?.openDrawer(),
                   icon: const Icon(Icons.menu),
