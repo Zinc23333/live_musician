@@ -12,6 +12,7 @@ void historyDialogRoute(BuildContext context, int index) async {
     0 => NetCache.fetchSeparateFiles,
     1 => NetCache.fetchVoice,
     2 => NetCache.fetchInferFiles,
+
     _ => throw Exception('Invalid index'),
   };
   WaitingDialog(fd(forceRefresh: true)).show(context).then((v) {
