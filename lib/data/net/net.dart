@@ -11,7 +11,6 @@ import 'package:live_musician/data/types/separate_model.dart';
 import 'package:live_musician/data/types/separate_sound.dart';
 
 class Net {
-  // static const String baseUrl = "https://api.zinc233.top/lm/";
   static Future<String> get baseUrl async => NetCache.fetchDomain();
 
   static Future<String> queryDomain() async {
