@@ -4,19 +4,22 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:live_musician/data/env/env.dart';
+import 'package:live_musician/data/net/net_cache.dart';
 import 'package:live_musician/data/types/infer_file.dart';
 import 'package:live_musician/data/types/separate_model.dart';
 import 'package:live_musician/data/types/separate_sound.dart';
 
 class Net {
-  static const String baseUrl = "https://api.zinc233.top/lm/";
+  // static const String baseUrl = "https://api.zinc233.top/lm/";
+  static Future<String> get baseUrl async => NetCache.fetchDomain();
 
   static Future<String> queryDomain() async {
     try {
       final response = await http.get(
-        Uri.parse(''),
+        Uri.parse(Env.cfUrl),
         headers: {
-          'Authorization': 'Bearer 5-DeuEXp0pt8Kw02KMsaXE7LvSrlaGOphoDcEFxJ',
+          'Authorization': 'Bearer ${Env.cfKey}',
           'Content-Type': 'application/json',
         },
       );
@@ -35,7 +38,7 @@ class Net {
   static Future<Duration?> ping() async {
     try {
       final start = DateTime.now();
-      final response = await http.get(Uri.parse("${baseUrl}ping"));
+      final response = await http.get(Uri.parse("${await baseUrl}ping"));
       if (response.statusCode == 200) {
         final end = DateTime.now();
         return end.difference(start);
@@ -50,7 +53,9 @@ class Net {
 
   // 音色分离
   static Future<List<SeparateModel>> fetchSeparateModel() async {
-    final response = await http.get(Uri.parse("${baseUrl}separate_model"));
+    final response = await http.get(
+      Uri.parse("${await baseUrl}separate_model"),
+    );
     if (response.statusCode == 200) {
       final r = jsonDecode(response.body) as List;
       return r.map((e) => SeparateModel.fromJson(e)).toList();
@@ -60,7 +65,9 @@ class Net {
   }
 
   static Future<List<SeparateSound>> fetchSeparateFiles() async {
-    final response = await http.get(Uri.parse("${baseUrl}separate_files"));
+    final response = await http.get(
+      Uri.parse("${await baseUrl}separate_files"),
+    );
     if (response.statusCode == 200) {
       final r = jsonDecode(response.body);
       return r.entries
@@ -75,7 +82,7 @@ class Net {
 
   // 音色推理
   static Future<List<String>> fetchVoice() async {
-    final response = await http.get(Uri.parse("${baseUrl}voice"));
+    final response = await http.get(Uri.parse("${await baseUrl}voice"));
     if (response.statusCode == 200) {
       final r = jsonDecode(response.body) as List;
       return r.cast<String>();
@@ -85,7 +92,9 @@ class Net {
   }
 
   static Future<List<InferFile>> fetchInferFiles() async {
-    final response = await http.get(Uri.parse("${baseUrl}voice_infer_files"));
+    final response = await http.get(
+      Uri.parse("${await baseUrl}voice_infer_files"),
+    );
     if (response.statusCode == 200) {
       final r = jsonDecode(response.body) as List;
       return r.map((e) => InferFile.fromJson(e)).toList();
@@ -102,7 +111,7 @@ class Net {
   ) async {
     try {
       final response = await http.get(
-        Uri.parse("${baseUrl}file/$cate/$name/$file"),
+        Uri.parse("${await baseUrl}file/$cate/$name/$file"),
       );
       if (response.statusCode == 200) {
         return response.bodyBytes;
@@ -130,7 +139,7 @@ class Net {
     Uint8List data,
   ) async {
     try {
-      final uri = Uri.parse("${baseUrl}separate");
+      final uri = Uri.parse("${await baseUrl}separate");
       final request =
           http.MultipartRequest("POST", uri)
             ..fields['taskName'] = taskName
@@ -149,7 +158,7 @@ class Net {
   // 音色训练
   static Future<bool> voiceTrain(String taskName, Uint8List data) async {
     try {
-      final uri = Uri.parse("${baseUrl}voice_train");
+      final uri = Uri.parse("${await baseUrl}voice_train");
       final request =
           http.MultipartRequest("POST", uri)
             ..fields['taskName'] = taskName
@@ -167,7 +176,7 @@ class Net {
   // 声音推理
   static Future<bool> voiceInfer(String toneName, String musicName) async {
     try {
-      final uri = Uri.parse("${baseUrl}voice_infer");
+      final uri = Uri.parse("${await baseUrl}voice_infer");
       final request =
           http.MultipartRequest("POST", uri)
             ..fields['toneName'] = toneName

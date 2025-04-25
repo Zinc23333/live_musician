@@ -4,6 +4,17 @@ import 'package:live_musician/data/types/separate_model.dart';
 import 'package:live_musician/data/types/separate_sound.dart';
 
 class NetCache {
+  static String _domain = "";
+  static Future<String> fetchDomain() async {
+    if (_domain.isNotEmpty) return _domain;
+    final r = await Net.queryDomain();
+    if (r.isNotEmpty) {
+      _domain = r;
+      return r;
+    }
+    return "";
+  }
+
   static List<SeparateModel> _separateModels = [];
   static Future<List<SeparateModel>> fetchSeparateModel({
     bool forceRefresh = false,

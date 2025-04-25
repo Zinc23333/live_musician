@@ -32,6 +32,8 @@ jobs:
           flutter --version
           flutter pub get
 
+      - run: echo -e "${{ secrets.ENV }}"  > .env
+
       - run: |
           mkdir dist
           dart pub global activate fastforge
@@ -74,6 +76,8 @@ jobs:
       - run: |
           flutter --version
           flutter pub get
+      
+          - run: echo -e "${{ secrets.ENV }}"  > .env
 
       - run: |
           dart run build_runner clean
@@ -107,6 +111,8 @@ jobs:
           channel: stable
           cache: true
 
+      - run: echo -e "${{ secrets.ENV }}"  > .env
+      
       - run: |
           mkdir dist
           dart pub global activate fastforge
@@ -135,6 +141,8 @@ jobs:
           cache: true
 
       - run: npm install -g appdmg
+
+      - run: echo -e "${{ secrets.ENV }}"  > .env
 
       - run: |
           mkdir dist
