@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:live_musician/data/constant.dart';
-import 'package:live_musician/data/net_ping.dart';
+import 'package:live_musician/data/env/constant.dart';
+import 'package:live_musician/data/net/net_ping.dart';
 import 'package:live_musician/view/func/history_dialog_route.dart';
 import 'package:live_musician/view/pages/sound_split_page.dart';
 import 'package:live_musician/view/pages/tone_train_page.dart';

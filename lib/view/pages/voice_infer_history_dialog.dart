@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:live_musician/data/net.dart';
+import 'package:live_musician/data/net/net.dart';
 import 'package:live_musician/data/types/infer_file.dart';
 import 'package:live_musician/view/widgets/music_player_dialog.dart';
 import 'package:live_musician/view/widgets/waiting_dialog.dart';

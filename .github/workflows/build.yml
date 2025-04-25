@@ -35,6 +35,8 @@ jobs:
       - run: |
           mkdir dist
           dart pub global activate fastforge
+          dart run build_runner clean
+          dart run build_runner build -d 1 -r
           dart run flutter_launcher_icons:generate
 
       - run: fastforge package --platform linux --targets deb,rpm,appimage,zip --flutter-build-args=no-tree-shake-icons
@@ -74,6 +76,8 @@ jobs:
           flutter pub get
 
       - run: |
+          dart run build_runner clean
+          dart run build_runner build -d 1 -r
           dart run flutter_launcher_icons:generate
 
       - run: flutter build apk --release --split-per-abi --no-tree-shake-icons 
@@ -106,6 +110,8 @@ jobs:
       - run: |
           mkdir dist
           dart pub global activate fastforge
+          dart run build_runner clean
+          dart run build_runner build -d 1 -r
           dart run flutter_launcher_icons:generate
                     
       - run: fastforge package --platform windows --targets exe,msix --flutter-build-args=no-tree-shake-icons
@@ -133,6 +139,8 @@ jobs:
       - run: |
           mkdir dist
           dart pub global activate fastforge
+          dart run build_runner clean
+          dart run build_runner build -d 1 -r
           dart run flutter_launcher_icons:generate
                     
       - run: fastforge package --platform macos --targets dmg,pkg --flutter-build-args=no-tree-shake-icons

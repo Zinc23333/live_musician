@@ -2,7 +2,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:live_musician/data/exts/scaffold_messenger_state_ex.dart';
-import 'package:live_musician/data/net.dart';
+import 'package:live_musician/data/net/net.dart';
 import 'package:live_musician/view/widgets/drop_file.dart';
 import 'package:live_musician/view/widgets/gap.dart';
 import 'package:live_musician/view/widgets/waiting_dialog.dart';

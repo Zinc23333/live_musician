@@ -9,7 +9,28 @@ import 'package:live_musician/data/types/separate_model.dart';
 import 'package:live_musician/data/types/separate_sound.dart';
 
 class Net {
-  static const String baseUrl = "https://qaq.zinc233.top:48979/lm/";
+  static const String baseUrl = "https://api.zinc233.top/lm/";
+
+  static Future<String> queryDomain() async {
+    try {
+      final response = await http.get(
+        Uri.parse(''),
+        headers: {
+          'Authorization': 'Bearer 5-DeuEXp0pt8Kw02KMsaXE7LvSrlaGOphoDcEFxJ',
+          'Content-Type': 'application/json',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return response.body.replaceAll("'", "").trim();
+      } else {
+        throw Exception("Failed to query domain: ${response.statusCode}");
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+      rethrow;
+    }
+  }
 
   static Future<Duration?> ping() async {
     try {

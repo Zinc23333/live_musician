@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:live_musician/data/net.dart';
+import 'package:live_musician/data/net/net.dart';
 
 class NetPing {
   static NetPing? _instance;

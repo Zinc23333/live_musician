@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:live_musician/data/exts/scaffold_messenger_state_ex.dart';
-import 'package:live_musician/data/net.dart';
-import 'package:live_musician/data/net_cache.dart';
+import 'package:live_musician/data/net/net.dart';
+import 'package:live_musician/data/net/net_cache.dart';
 import 'package:live_musician/data/types/separate_sound.dart';
 import 'package:live_musician/view/widgets/future_choice.dart';
 import 'package:live_musician/view/widgets/gap.dart';
