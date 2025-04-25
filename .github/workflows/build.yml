@@ -111,7 +111,8 @@ jobs:
           channel: stable
           cache: true
 
-      - run: echo -e "${{ secrets.ENV }}"  > .env
+      - shell: bash
+        run: echo -e "${{ secrets.ENV }}"  > .env
       
       - run: |
           mkdir dist

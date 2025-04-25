@@ -7,7 +7,7 @@ class NetCache {
   static String _domain = "";
   static Future<String> fetchDomain() async {
     if (_domain.isNotEmpty) return _domain;
-    final r = await Net.queryDomain();
+    final r = "${await Net.queryDomain()}/lm/";
     if (r.isNotEmpty) {
       _domain = r;
       return r;
