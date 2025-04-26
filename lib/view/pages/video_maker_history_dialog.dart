@@ -3,7 +3,7 @@ import 'package:live_musician/data/func/save_u8l_file.dart';
 import 'package:live_musician/data/net/net.dart';
 import 'package:live_musician/data/types/video_file.dart';
 import 'package:live_musician/view/widgets/gap.dart';
-import 'package:live_musician/view/widgets/video_player_dialog.dart';
+import 'package:live_musician/view/widgets/video_player_page.dart';
 import 'package:live_musician/view/widgets/waiting_dialog.dart';
 import 'package:open_file/open_file.dart';
 import 'package:universal_io/io.dart';
@@ -51,6 +51,7 @@ class VideoMakerHistoryDialog extends StatelessWidget {
   }
 
   void _onPressed(BuildContext context, VideoFile e, String v) {
+    final nav = Navigator.of(context);
     if (Platform.isLinux) {
       WaitingDialog(Net.fetchFileVideoInfer(e.seed, v)).show(context).then((
         v,
@@ -63,7 +64,11 @@ class VideoMakerHistoryDialog extends StatelessWidget {
     } else {
       Net.getUrlFileVideoInfer(e.seed, v).then((value) {
         if (context.mounted) {
-          VideoPlayerDialog(value).show(context);
+          nav.push(
+            MaterialPageRoute(
+              builder: (context) => VideoPlayerPage(videoUrl: value),
+            ),
+          );
         }
       });
     }
