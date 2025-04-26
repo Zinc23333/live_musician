@@ -4,7 +4,6 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:live_musician/data/env/env.dart';
 import 'package:live_musician/data/net/net_cache.dart';
 import 'package:live_musician/data/types/infer_file.dart';
 import 'package:live_musician/data/types/separate_model.dart';
@@ -112,6 +111,12 @@ class Net {
   }
 
   // 拉取文件
+  static Future<String> getFileUrl(
+    String cate,
+    String name,
+    String file,
+  ) async => "${await baseUrl}file/$cate/$name/$file";
+
   static Future<Uint8List?> fetchFile(
     String cate,
     String name,
@@ -119,7 +124,7 @@ class Net {
   ) async {
     try {
       final response = await http.get(
-        Uri.parse("${await baseUrl}file/$cate/$name/$file"),
+        Uri.parse(await getFileUrl(cate, name, file)),
       );
       if (response.statusCode == 200) {
         return response.bodyBytes;
@@ -140,6 +145,9 @@ class Net {
 
   static Future<Uint8List?> fetchFileVideoInfer(String seed, String file) =>
       fetchFile("video_infer", seed, file);
+
+  static Future<String> getUrlFileVideoInfer(String seed, String file) =>
+      getFileUrl("video_infer", seed, file);
 
   // 提交算题
 

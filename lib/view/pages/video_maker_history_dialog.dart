@@ -41,50 +41,31 @@ class VideoMakerHistoryDialog extends StatelessWidget {
                   .map(
                     (v) => RawChip(
                       label: Text(v.$1),
-                      onPressed: () {
-                        WaitingDialog(
-                          Net.fetchFileVideoInfer(e.seed, v.$2),
-                        ).show(context).then((v) async {
-                          if (v != null) {
-                            if (Platform.isLinux || Platform.isWindows) {
-                              final r = await saveUint8listToFileTemp(
-                                v,
-                                ".mp4",
-                              );
-                              await OpenFile.open(r);
-                            } else {
-                              if (context.mounted) {
-                                VideoPlayerDialog(v).show(context);
-                              }
-                            }
-                          }
-                          // if (v != null && context.mounted) {
-                          // MusicPlayerDialog(v).show(context);
-
-                          // }
-                        });
-                      },
+                      onPressed: () => _onPressed(context, e, v.$2),
                     ),
                   )
                   .toList(),
         ),
       ],
-      // title: Text.rich(
-      //   TextSpan(
-      //     children: [
-      //       TextSpan(text: e.name, style: TextStyle(color: Colors.amber)),
-      //       const TextSpan(text: "  "),
-      //       TextSpan(text: e.toneName, style: TextStyle(color: Colors.blue)),
-      //     ],
-      //   ),
-      // ),
-      // onTap: () {
-      //   WaitingDialog(Net.fetchFileInfer(e)).show(context).then((v) {
-      //     if (v != null && context.mounted) {
-      //       MusicPlayerDialog(v).show(context);
-      //     }
-      //   });
-      // },
     );
+  }
+
+  void _onPressed(BuildContext context, VideoFile e, String v) {
+    if (Platform.isLinux) {
+      WaitingDialog(Net.fetchFileVideoInfer(e.seed, v)).show(context).then((
+        v,
+      ) async {
+        if (v != null) {
+          final r = await saveUint8listToFileTemp(v, ".mp4");
+          await OpenFile.open(r);
+        }
+      });
+    } else {
+      Net.getUrlFileVideoInfer(e.seed, v).then((value) {
+        if (context.mounted) {
+          VideoPlayerDialog(value).show(context);
+        }
+      });
+    }
   }
 }
