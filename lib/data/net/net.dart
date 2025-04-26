@@ -17,11 +17,7 @@ class Net {
   static Future<String> queryDomain() async {
     try {
       final response = await http.get(
-        Uri.parse(Env.cfUrl),
-        headers: {
-          'Authorization': 'Bearer ${Env.cfKey}',
-          'Content-Type': 'application/json',
-        },
+        Uri.parse("https://worker.zinc233.top/fetch-live-musician-domain"),
       );
 
       if (response.statusCode == 200) {

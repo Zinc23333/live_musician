@@ -3,6 +3,7 @@ import 'package:live_musician/data/net/net.dart';
 import 'package:live_musician/data/types/infer_file.dart';
 import 'package:live_musician/data/types/separate_model.dart';
 import 'package:live_musician/data/types/separate_sound.dart';
+import 'package:live_musician/data/types/video_file.dart';
 
 class NetCache {
   static String _domain = "";
@@ -70,6 +71,21 @@ class NetCache {
     final r = await Net.fetchInferFiles();
     if (r.isNotEmpty) {
       _inferFiles = r;
+      return r;
+    }
+    return [];
+  }
+
+  static List<VideoFile> _videoFiles = [];
+  static Future<List<VideoFile>> fetchVideoFiles({
+    bool forceRefresh = false,
+  }) async {
+    if (!forceRefresh && _videoFiles.isNotEmpty) {
+      return _videoFiles;
+    }
+    final r = await Net.fetchVideoFiles();
+    if (r.isNotEmpty) {
+      _videoFiles = r;
       return r;
     }
     return [];

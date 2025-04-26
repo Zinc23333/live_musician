@@ -15,7 +15,7 @@ class VideoFile {
 
   factory VideoFile.fromJson(Map<String, dynamic> json) {
     return VideoFile(
-      name: json['name'],
+      name: json['taskName'],
       seed: json['seed'],
       containOriginalFile: json['containOriginalFile'],
       containInferFile: json['containInferFile'],

@@ -42,6 +42,8 @@ dependencies:
   envied: ^1.1.1
   open_file: ^3.5.10
   path_provider: ^2.1.5
+  video_player: ^2.9.5
+  path: 
 
 
 dev_dependencies:
