@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:live_musician/data/net/net.dart';
 import 'package:live_musician/data/types/infer_file.dart';
 import 'package:live_musician/data/types/separate_model.dart';
@@ -9,6 +10,7 @@ class NetCache {
     if (_domain.isNotEmpty) return _domain;
     final r = "${await Net.queryDomain()}/lm/";
     if (r.isNotEmpty) {
+      debugPrint("domain: $r");
       _domain = r;
       return r;
     }

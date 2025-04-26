@@ -63,9 +63,9 @@ class _VoiceInferPageState extends State<VoiceInferPage> {
               Net.voiceInfer(voice!, separateSound!.name),
             ).show(context).then((v) {
               if (v == true) {
-                sms.show("分离成功");
+                sms.show("任务提交成功");
               } else {
-                sms.show("分离失败");
+                sms.show("任务提交失败");
               }
             });
           },

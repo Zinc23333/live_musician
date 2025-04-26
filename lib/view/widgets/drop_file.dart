@@ -17,7 +17,8 @@ class DropFile extends StatefulWidget {
   });
   final FileType fileType;
   final List<String> allowExtension;
-  final void Function(Uint8List data, String? fileName)? onFile;
+  final void Function(Uint8List data, String? fileName, String fileType)?
+  onFile;
 
   @override
   State<DropFile> createState() => _DropFileState();
@@ -43,7 +44,7 @@ class _DropFileState extends State<DropFile> {
         var ld = f.lastIndexOf(".");
         ld = ld == -1 ? f.length : ld;
 
-        widget.onFile?.call(value, f.substring(0, ld));
+        widget.onFile?.call(value, f.substring(0, ld), f.substring(ld));
       }
     }
   }

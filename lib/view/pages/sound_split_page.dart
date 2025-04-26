@@ -22,6 +22,7 @@ class _SoundSplitPageState extends State<SoundSplitPage> {
   SeparateModel? selectedModel;
   TextEditingController taskNameController = TextEditingController();
   Uint8List? data;
+  String? fileType;
 
   @override
   Widget build(BuildContext context) {
@@ -73,10 +74,11 @@ class _SoundSplitPageState extends State<SoundSplitPage> {
           key: ValueKey("drop-file-1"),
           allowExtension: ["wav", "mp3", "flac", "aac", "ogg", "m4a"],
           fileType: FileType.audio,
-          onFile: (d, f) {
+          onFile: (d, f, ft) {
             data = d;
             if (f != null) {
               taskNameController.text = f;
+              fileType = ft;
             }
           },
         ),
@@ -99,12 +101,12 @@ class _SoundSplitPageState extends State<SoundSplitPage> {
             }
 
             WaitingDialog(
-              Net.seperate(tn, selectedModel!, data!),
+              Net.seperate(tn, selectedModel!, data!, fileType!),
             ).show(context).then((v) {
               if (v == true) {
-                sms.show("分离成功");
+                sms.show("任务提交成功");
               } else {
-                sms.show("分离失败");
+                sms.show("任务提交失败");
               }
             });
           },

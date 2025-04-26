@@ -17,6 +17,9 @@ class ToneTrainPage extends StatefulWidget {
 class _ToneTrainPageState extends State<ToneTrainPage> {
   final taskNameController = TextEditingController();
   Uint8List? data;
+  String? fileName;
+  String? fileType;
+
   @override
   Widget build(BuildContext context) {
     return ListView(
@@ -36,10 +39,11 @@ class _ToneTrainPageState extends State<ToneTrainPage> {
         DropFile(
           key: ValueKey("drop-file-2"),
           allowExtension: ["zip"],
-          onFile: (d, fileName) {
+          onFile: (d, fn, ft) {
             data = d;
-            if (fileName != null) {
-              taskNameController.text = fileName;
+            if (fn != null) {
+              taskNameController.text = fn;
+              fileType = ft;
             }
           },
         ),
@@ -57,11 +61,13 @@ class _ToneTrainPageState extends State<ToneTrainPage> {
             }
 
             final sms = ScaffoldMessenger.of(context);
-            WaitingDialog(Net.voiceTrain(tn, data!)).show(context).then((v) {
+            WaitingDialog(
+              Net.voiceTrain(tn, data!, fileType!),
+            ).show(context).then((v) {
               if (v == true) {
-                sms.show("训练成功");
+                sms.show("任务提交成功");
               } else {
-                sms.show("训练失败");
+                sms.show("任务提交失败");
               }
             });
             ;
