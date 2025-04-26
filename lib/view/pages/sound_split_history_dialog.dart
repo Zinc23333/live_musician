@@ -50,9 +50,7 @@ class SoundSplitHistoryDialog extends StatelessWidget {
 
     return TextButton.icon(
       onPressed: () {
-        WaitingDialog(Net.fetchFileSeparate(dname, fname)).show(context).then((
-          v,
-        ) {
+        WaitingDialog(Net.getUrlSeparate(dname, fname)).show(context).then((v) {
           if (v != null && context.mounted) {
             MusicPlayerDialog(v).show(context);
           }

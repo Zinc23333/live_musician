@@ -35,7 +35,8 @@ class VideoMakerHistoryDialog extends StatelessWidget {
 
         Gap(),
         Wrap(
-          // children: [RawChip(label: Text("原视频"))],
+          spacing: 8,
+          runSpacing: 8,
           children:
               e.video
                   .map(

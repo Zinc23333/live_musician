@@ -146,6 +146,12 @@ class Net {
   static Future<Uint8List?> fetchFileVideoInfer(String seed, String file) =>
       fetchFile("video_infer", seed, file);
 
+  static Future<String> getUrlSeparate(String name, String file) =>
+      getFileUrl("separate", name, file);
+
+  static Future<String> getUrlFileInfer(String seed) =>
+      getFileUrl("change", seed, "1.wav");
+
   static Future<String> getUrlFileVideoInfer(String seed, String file) =>
       getFileUrl("video_infer", seed, file);
 

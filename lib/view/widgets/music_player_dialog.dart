@@ -1,11 +1,10 @@
-import 'dart:typed_data';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:live_musician/view/widgets/gap.dart';
 
 class MusicPlayerDialog extends StatefulWidget {
-  const MusicPlayerDialog(this.audioData, {super.key});
-  final Uint8List audioData;
+  const MusicPlayerDialog(this.audioUrl, {super.key});
+  final String audioUrl;
 
   void show(BuildContext context) =>
       showDialog(context: context, builder: (context) => this);
@@ -20,6 +19,7 @@ class _MusicPlayerDialogState extends State<MusicPlayerDialog> {
   Duration _duration = Duration.zero;
   bool _isDragging = false;
   PlayerState _playerState = PlayerState.stopped;
+  late final _source = UrlSource(widget.audioUrl);
 
   @override
   void initState() {
@@ -30,7 +30,7 @@ class _MusicPlayerDialogState extends State<MusicPlayerDialog> {
   }
 
   Future<void> _initAudio() async {
-    await _player.setSource(BytesSource(widget.audioData));
+    await _player.setSource(_source);
 
     _player.onDurationChanged.listen((duration) {
       if (mounted) {
@@ -70,7 +70,7 @@ class _MusicPlayerDialogState extends State<MusicPlayerDialog> {
       if (_playerState == PlayerState.paused) {
         await _player.resume();
       } else {
-        await _player.play(BytesSource(widget.audioData));
+        await _player.play(_source);
       }
     }
   }

@@ -2,6 +2,8 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:live_musician/data/env/constant.dart';
+import 'package:live_musician/data/exts/scaffold_messenger_state_ex.dart';
+import 'package:live_musician/data/net/net_cache.dart';
 import 'package:live_musician/data/net/net_ping.dart';
 import 'package:live_musician/view/func/history_dialog_route.dart';
 import 'package:live_musician/view/pages/sound_split_page.dart';
@@ -253,16 +255,25 @@ class _PingBoxState extends State<_PingBox> {
             );
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
-      child: Container(
-        padding: EdgeInsets.symmetric(horizontal: 8),
-        decoration: de,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(Icons.circle, color: fc, size: 8),
-            SizedBox(width: 4),
-            Text(txt, style: TextStyle(color: fc)),
-          ],
+      child: InkWell(
+        onTap: () {
+          NetCache.fetchDomain(forceRefresh: true).then((v) {
+            if (context.mounted) {
+              ScaffoldMessenger.of(context).show("创新获取域名成功: $v");
+            }
+          });
+        },
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 8),
+          decoration: de,
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(Icons.circle, color: fc, size: 8),
+              SizedBox(width: 4),
+              Text(txt, style: TextStyle(color: fc)),
+            ],
+          ),
         ),
       ),
     );

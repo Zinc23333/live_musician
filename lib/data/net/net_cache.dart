@@ -7,8 +7,8 @@ import 'package:live_musician/data/types/video_file.dart';
 
 class NetCache {
   static String _domain = "";
-  static Future<String> fetchDomain() async {
-    if (_domain.isNotEmpty) return _domain;
+  static Future<String> fetchDomain({bool forceRefresh = false}) async {
+    if (!forceRefresh && _domain.isNotEmpty) return _domain;
     final r = "${await Net.queryDomain()}/lm/";
     if (r.isNotEmpty) {
       debugPrint("domain: $r");

@@ -33,7 +33,7 @@ class VoiceInferHistoryDialog extends StatelessWidget {
         ),
       ),
       onTap: () {
-        WaitingDialog(Net.fetchFileInfer(e.seed)).show(context).then((v) {
+        WaitingDialog(Net.getUrlFileInfer(e.seed)).show(context).then((v) {
           if (v != null && context.mounted) {
             MusicPlayerDialog(v).show(context);
           }
