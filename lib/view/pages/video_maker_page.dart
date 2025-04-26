@@ -42,7 +42,16 @@ class _VideoMakerPageState extends State<VideoMakerPage> {
         Gap(),
         FutureChoice(
           future: NetCache.fetchInferFiles(),
-          showNameFunc: (e) => "${e.musicName} | ${e.toneName}",
+          // showNameFunc: (e) => "${e.musicName} | ${e.toneName}",
+          showNameWidgetFunc:
+              (e) => Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(e.musicName),
+                  VerticalDivider(),
+                  Text(e.toneName.substring(0, e.toneName.length - 4)),
+                ],
+              ),
           selected: inferFile,
           onSelected: (e) {
             inferFile = e;

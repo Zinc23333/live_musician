@@ -4,12 +4,14 @@ class FutureChoice<T> extends StatelessWidget {
   const FutureChoice({
     super.key,
     required this.future,
-    required this.showNameFunc,
+    this.showNameFunc,
+    this.showNameWidgetFunc,
     this.selected,
     required this.onSelected,
-  });
+  }) : assert(showNameFunc != null || showNameWidgetFunc != null);
   final Future<List<T>> future;
-  final String Function(T) showNameFunc;
+  final String Function(T)? showNameFunc;
+  final Widget Function(T)? showNameWidgetFunc;
   final T? selected;
   final void Function(T) onSelected;
 
@@ -26,7 +28,10 @@ class FutureChoice<T> extends StatelessWidget {
                 snapshot.data!
                     .map(
                       (e) => ChoiceChip(
-                        label: Text(showNameFunc(e)),
+                        label:
+                            showNameWidgetFunc != null
+                                ? showNameWidgetFunc!(e)
+                                : Text(showNameFunc!(e)),
                         selected: e == selected,
                         onSelected: (value) {
                           if (value) {
