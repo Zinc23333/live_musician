@@ -75,6 +75,19 @@ class Net {
     }
   }
 
+  static Future<bool> exchangeSeparateFiles(String taskName) async {
+    try {
+      final uri = Uri.parse("${await baseUrl}exchange_separate_file");
+      final request = http.MultipartRequest("POST", uri)
+        ..fields['taskName'] = taskName;
+      final response = await request.send();
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint(e.toString());
+      return false;
+    }
+  }
+
   // 音色推理
   static Future<List<String>> fetchVoice() async {
     final response = await http.get(Uri.parse("${await baseUrl}voice"));

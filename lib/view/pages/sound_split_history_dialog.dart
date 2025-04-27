@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:live_musician/data/exts/scaffold_messenger_state_ex.dart';
 import 'package:live_musician/data/net/net.dart';
 import 'package:live_musician/data/types/separate_sound.dart';
 import 'package:live_musician/view/widgets/music_player_dialog.dart';
@@ -20,10 +21,7 @@ class SoundSplitHistoryDialog extends StatelessWidget {
               data
                   .map(
                     (e) => ListTile(
-                      title: Text(
-                        e.name,
-                        style: TextTheme.of(context).titleMedium,
-                      ),
+                      title: _buildTitle(e, context),
                       subtitle: SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         child: Row(
@@ -41,6 +39,34 @@ class SoundSplitHistoryDialog extends StatelessWidget {
                   .toList(),
         ),
       ),
+    );
+  }
+
+  Widget _buildTitle(SeparateSound e, BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(e.name, style: TextTheme.of(context).titleMedium),
+        IconButton(
+          onPressed: () {
+            final nav = Navigator.of(context);
+            final sms = ScaffoldMessenger.of(context);
+            WaitingDialog(Net.exchangeSeparateFiles(e.name)).show(context).then(
+              (v) {
+                if (v == true) {
+                  nav.pop();
+                  sms.showSuccess("交换成功");
+                } else if (v == false) {
+                  sms.showError("交换失败");
+                }
+              },
+            );
+          },
+          icon: Icon(Icons.compare_arrows_rounded),
+          color: Colors.grey,
+          tooltip: "交换乐器和人声",
+        ),
+      ],
     );
   }
 
