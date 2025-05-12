@@ -70,7 +70,6 @@ class _ToneTrainPageState extends State<ToneTrainPage> {
                 sms.show("任务提交失败");
               }
             });
-            ;
           },
           child: Text("开始训练"),
         ),
