@@ -259,7 +259,7 @@ class _PingBoxState extends State<_PingBox> {
         onTap: () {
           NetCache.fetchDomain(forceRefresh: true).then((v) {
             if (context.mounted) {
-              ScaffoldMessenger.of(context).show("创新获取域名成功: $v");
+              ScaffoldMessenger.of(context).show("获取域名成功: $v");
             }
           });
         },
